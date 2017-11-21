@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Storage的学习</title>
+<!-- 引入公共样式 -->
+<#include "/public/common.html">
+</head>
+<body class="site-menubar-fold site-menubar-keep">
+	<!-- 引入一个左边导航栏-->
+	<#include "left.html">
+	<div class="page profile profile_index">
+		<div class="page-content">
+			<div class="row">
+
+				<div class=" col-lg-12 col-md-12">
+					<div style="background: #fff; padding: 30px; color: #333">
+						<h1>cookie和Storage的学习</h1>
+						<p>描述：</p>
+
+						<h1>模拟QQ空间，微博数据本地存储</h1>
+						<textarea style="width: 500px; height: 200px" id="content">
+							
+						</textarea>
+						<h1>关于 storage的讲解</h1>
+						<p>注意：storage分为localStorage和sessionStorage,只有在ie9+浏览器才支持</p>
+						<p>stroage本地存储和java中的session,application没有任何联系。</p>
+						<ul>
+							<li>设置数据的方法：setItem(key,value)</li>
+							<li>获取数据的方法：getItem(key)</li>
+							<li>删除数据的方法：removeItem(key)</li>
+							<li>清空：clear(),但是不要使用</li>
+							<li>获取缓存的条目数：.length</li>
+							<li>获取key的名字，key(index)</li>
+						</ul>
+						<hr>
+						<h3>localStorage和sessionStorage的区别</h3>
+						<p>localStorage是全局范围的数据本地缓存,生命周期释放只能通过调用
+							removeItem(),clear()或者卸载浏览器，垃圾回收的放松才会得到释放</p>
+						<p>sessionStorage 是会话级别的本地缓存，如果浏览器已关闭就清空</p>
+
+						<pre>
+						//设置缓存，如果flag不写或在false都是localStorage,否则sessionStorage
+						function setSession(key,value,flag){
+							var storage = flag?window.sessionStorage:window.localStorage;
+							storage.setItem("mk_"+key,value);
+						};
+						
+						//设置缓存，如果flag不写或在false都是localStorage,否则sessionStorage
+						function getSession(key,flag){
+							var storage = flag?window.sessionStorage:window.localStorage;
+							storage.getItem("mk_"+key,value);
+						};
+						
+						//设置缓存，如果flag不写或在false都是localStorage,否则sessionStorage
+						function removeSession(key,flag){
+							var storage = flag?window.sessionStorage:window.localStorage;
+							storage.removeItem("mk_"+key);
+						};
+						</pre>
+						<h1>作业</h1>
+						<hr/>
+						<div>
+							<form action="">
+								<p>账户：<input type="text" id="username" /></p>
+								<p>密码：<input type="text" id="password" /></p>
+								<p>性别：<input type="text" id="sex" /></p>
+								<p><label><input type="checkbox" name="remember" id="remember" />记住密码</label></p>
+								<p><input type="button"  value="登录"/></p>
+							</form>
+						</div>
+						<pre>
+							//获取账号缓存
+							var nametext = getSession("name");
+							console.log(nametext);
+							if(isNotEmpty(nametext)){
+								$("#username").val(nametext);
+							}
+							//设置账号缓存
+							$("#username").on("keydown", function() {
+								var username = $(this).val();
+								setSession("name",username);
+							});
+							
+							
+							//获取密码缓存
+							var passtext = localStorage.getItem("password");
+							if(isNotEmpty(passtext)){
+								$("#password").val(passtext);
+							}
+							//设置密码缓存
+							$("#password").on("keydown", function() {
+								var password = $(this).val();
+								localStorage.setItem("password",password);
+							});
+						
+							
+							//获取性别缓存
+							var sextext = localStorage.getItem("sex");
+							if(isNotEmpty(sextext)){
+								$("#sex").val(sextext);
+							}
+							//设置性别缓存
+							$("#sex").on("keydown", function() {
+								var sex = $(this).val();
+								localStorage.setItem("sex",sex);
+							});
+			
+							//获取复选框的缓存
+							var wordText = localStorage.getItem("word");
+							if(wordText == "true"){
+								$("#remember").prop("checked",true);
+							}
+							//设置复选框缓存
+							$("#remember").on("change",function(){
+								var value = $(this).is(":checked");
+								localStorage.setItem("word",value);
+							});
+						</pre>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="${basePath}/js/storage.js"></script>
+	<script>
+		$(function() {
+			//获取账号缓存
+			var nametext = getSession("name");
+			console.log(nametext);
+			if(isNotEmpty(nametext)){
+				$("#username").val(nametext);
+			}
+			//设置账号缓存
+			$("#username").on("keyup", function() {
+				var username = $(this).val();
+				setSession("name",username);
+			});
+			
+			
+			//获取密码缓存
+			var passtext = localStorage.getItem("password");
+			if(isNotEmpty(passtext)){
+				$("#password").val(passtext);
+			}
+			//设置密码缓存
+			$("#password").on("keyup", function() {
+				var password = $(this).val();
+				localStorage.setItem("password",password);
+			});
+		
+			
+			//获取性别缓存
+			var sextext = localStorage.getItem("sex");
+			if(isNotEmpty(sextext)){
+				$("#sex").val(sextext);
+			}
+			//设置性别缓存
+			$("#sex").on("keyup", function() {
+				var sex = $(this).val();
+				localStorage.setItem("sex",sex);
+			});
+			
+			//获取复选框的缓存
+			var wordText = localStorage.getItem("word");
+			if(wordText == "true"){
+				$("#remember").prop("checked",true);
+			}
+			//设置复选框缓存
+			$("#remember").on("change",function(){
+				var value = $(this).is(":checked");
+				localStorage.setItem("word",value);
+			});
+		});
+	</script>
+</body>
+</html>

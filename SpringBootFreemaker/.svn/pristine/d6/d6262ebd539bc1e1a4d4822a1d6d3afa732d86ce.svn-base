@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mengke.mapper.user.IUsermapper">
+	<select id="getUser" resultType="user">
+		select id,username,PASSWORD from mk_user
+	</select>
+	<select id="user" resultType="user" parameterType="user">
+		SELECT
+			id,
+			username,
+			account,
+			PASSWORD
+		FROM
+			user
+		WHERE
+			account = #{account}
+		AND `password` = #{password}
+	</select>
+</mapper>

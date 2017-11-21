@@ -1,0 +1,31 @@
+package com.mengke.mapper.comment;
+
+import java.util.List;
+
+import com.mengke.bean.Comment;
+
+/**
+ * 
+ * 
+ * ICommentMapper<br/>
+ * 创建人:曹安匀<br/>
+ * 时间：2017年11月3日-上午9:01:10 <br/>
+ * @version 1.0.0<br/>
+ *
+ */
+
+public interface ICommentMapper {
+	/**
+	 * 
+	 * 查询所有评论<br/>
+	 * 方法名：getcomment<br/>
+	 * 创建人：曹安匀 <br/>
+	 * 时间：2017年11月6日-上午10:55:29 <br/>
+	 * 手机:17608418601<br/>
+	 * @return List<Comment><br/>
+	 * @exception <br/>
+	 * @since  1.0.0<br/>
+	 */
+
+	public List<Comment> getcomment();
+}

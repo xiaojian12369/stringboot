@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>banner添加</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" href="${basePath}/css/center.css" />
+<link rel="stylesheet" type="text/css"
+	href="${basePath}/iconfont/iconfont.css" />
+<link rel="stylesheet" type="text/css"
+	href="${basePath}/css/banner/add.css" />
+<#include "/public/common.html">
+</head>
+<body class="site-menubar-fold site-menubar-keep">
+	<!-- 引入左侧导航栏 -->
+	<#include "/left.html">
+	<div class="page profile profile_info profile_index">
+		<div class="page-content">
+			<div class="row">
+				<div class="col-lg-7 col-md-7">
+					<div class="nav-tabs-horizontal nav-tabs-inverse">
+						<ul class="nav nav-tabs nav-tabs-solid profile_nav"
+							id="nav-tabs-solidlist">
+							<li class="active"><a href="javascript:void(0);"
+								class="padding-horizontal-30"> <i
+									class="iconfont icon-setting  tp1"></i>Banner添加
+							</a></li>
+							<li class="active"><a href="javascript:void(0);"
+								class="padding-horizontal-30"> <i
+									class="iconfont icon-setting  tp1"></i>Banner详情
+							</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div class="row">
+								<div class="col-md-7">
+									<div class="musicaddbox">
+										<form method="post">
+											<p>
+												<input type="text" class="inpt" name="title" id="title"
+													placeholder="请输入banne标题" />
+											</p>
+											<p>
+												<input type="text" class="inpt" name="description"
+													id="description" placeholder="请输入描述" />
+											</p>
+											<p>
+												<input type="text" class="inpt img" id="img"
+													readonly="readonly" name="img" placeholder="封面图片" /> <span
+													class="btn btn-success fileinput-button"> <i
+													class="glyphicon glyphicon-plus"></i> <span>Select
+														files...</span> <input id="fileupload" type="file" name="doc"
+													multiple>
+												</span>
+											<div id="progress" class="progress">
+												<div class="progress-bar progress-bar-success"></div>
+											</div>
+											<div id="files" class="files"></div>
+											</p>
+											<p>
+												<label><input type="radio" name="status" value="1"
+													checked="checked" />发布</label> <label><input type="radio"
+													name="status" value="0" />未发布</label>
+											</p>
+											<p>
+												<input type="button" class="inpt inpbtn" id="addmusic"
+													value="添加" />
+											</p>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="${basePath}/js/upload/jquery.ui.widget.js"></script>
+	<script src="${basePath}/js/upload/jquery.iframe-transport.js"></script>
+	<script src="${basePath}/js/upload/jquery.fileupload.js"></script>
+	<script>
+		$(function() {
+			$("#nav-tabs-solidlist").find("li").on("click", function() {
+				$(this).addClass("active").siblings().removeClass("active");
+				var index = $(this).index();
+				if(index==0){
+					window.location.href=basePath+"/admin/add";
+				}else{
+					window.location.href=basePath+"/admin/banlist";
+				}
+			});
+			//文件上传
+			mkbanner.init();
+			//添加的方法
+			mkbanner.add();
+		});
+
+		var mkbanner = {
+			//文件上传的方法
+			init:function(){
+				var url = "${basePath}/upload/file";
+				$('#fileupload').fileupload(
+						{
+							url : url,
+							dataType : 'json',
+							paramName : "doc",
+							done : function(e, data) {
+								var json = data.result;
+								//将上传的url传入
+								$("#img").val(json.path);
+							},
+							progressall : function(e, data) {
+								var progress = parseInt(data.loaded / data.total
+										* 100, 10);
+								$('#progress .progress-bar').css('width',
+										progress + '%');
+						}
+				});
+			},
+			//添加Banner的方法
+			add : function() {
+				$("#addmusic").on("click",function() {
+					//获取文本框的值
+					var title = $("#title").val();
+					if (isEmpty(title)) {
+						loading("请输入Banner标题");
+						$("#title").focus();
+						return;
+					}
+					var description = $("#description").val();
+					if (isEmpty(description)) {
+						loading("请输入Banner描述");
+						$("#description").focus();
+						return;
+					}
+					var img = $("#img").val();
+					if (isEmpty(img)) {
+						loading("请上传Banner图片");
+						$("#img").focus();
+						return;
+					}
+					var status = $("input[type='radio'][name='status']:checked").val();
+					//传参
+					var param = {
+						"title" : title,
+						"img" : img,
+						"status" : status
+					};
+					$.ajax({
+						type : "post",
+						url : basePath + "/admin/addBanner",
+						data : param,
+						beforeSend : function() {
+							//loading("请求处理中。。。");
+						},
+						error : function(err) {
+							console.log("error..." + err);
+						},
+						success : function(data) {
+							if (data == "success") {
+								loading("添加成功");
+								$("#title").val("");
+								$("#description").val("");
+								$("#img").val("");
+								window.location.href=basePath+"/admin/banlist";
+							} else {
+								loading("添加失败");
+							}
+						}
+					});
+				});
+			}
+		}
+	</script>
+</body>
+</html>

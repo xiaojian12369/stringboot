@@ -1,0 +1,41 @@
+package com.mengke;
+
+import java.util.Iterator;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.mengke.bean.Category;
+import com.mengke.bean.User;
+import com.mengke.mapper.category.ICategorymapper;
+import com.mengke.mapper.user.IUsermapper;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class SpringBootFreemakerApplicationTests {
+
+	@Autowired 
+	IUsermapper iUsermapper;
+	@Test
+	public void contextLoads() {
+		User users=new User();
+		users.setAccount("1607226335");
+		users.setPassword("123456");
+		User user=iUsermapper.user(users);
+		System.out.println(user.getUsername());
+	}
+	
+	@Autowired
+	ICategorymapper categorymapper;
+	@Test
+	public void categoryText(){
+		List<Category> categorys = categorymapper.getCategory();
+		for (Category category : categorys) {
+			System.out.println(category.getName());
+		}
+	}
+}
